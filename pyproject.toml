@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tox-pyproject-plugins"
+authors = [{name = "X"}]
+description="Y"
+version = "0.0.1"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "CC0-1.0"}
+classifiers = [
+    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Testing",
+]
+
+dependencies = [
+    "tox-pyproject @ file:///home/thomas/src/tox-pyproject/tox-pyproject",
+]
+
+[project.entry-points."tox_pyproject.plugins.discovery"]
+b = "tox_pyproject.plugins.discovery.b:BDiscoveryPlugin"
+
+[project.optional-dependencies]
+test = [
+    "PyYAML",
+    "coverage",
+    "lark",
+    "pytest",
+    "pytest-cov",
+    "tox",
+]
+
+[tool.isort]
+profile = "black"
