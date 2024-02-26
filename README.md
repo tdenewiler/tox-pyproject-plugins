@@ -10,7 +10,7 @@ The directory structure used looks like:
   - tox-pyproject-plugins (git repo)
   - venv
 
-The virtual environment is created and activated with
+Create and activate a virtual environment, then install the `tox-pyproject` package.
 
 ```shell
 cd ~/src/tox-pyproject
@@ -20,7 +20,31 @@ cd tox-pyproject
 pip install .
 ```
 
-Running the following works.
+Install the `tox-pyproject-plugins` package and make sure that both `a` and `b` plugins are discovered.
+
+```shell
+cd ~/src/tox-pyproject/tox-pyproject-plugins
+pip install .
+tox_project
+```
+
+Expected results are
+
+```shell
+$ tox_pyproject
+discovered plugins: [EntryPoint(name='a', value='tox_pyproject.plugins.discovery.a:ADiscoveryPlugin', group='tox_pyproject.plugins.discovery'), EntryPoint(name='b', value='tox_pyproject.plugins.discovery.b:BDiscoveryPlugin', group='tox_pyproject.plugins.discovery')]
+start
+---Discovery---
+Running A discovery plugin...
+A discovery plugin done.
+Running B discovery plugin...
+B discovery plugin done.
+All plugins run: ['A', 'B']
+---Discovery---
+success: True
+```
+
+Running `tox-pyproject-plugins` unit tests with `pytest` works.
 
 ```shell
 cd ~/src/tox-pyproject/tox-pyproject-plugins
@@ -29,7 +53,7 @@ pip install .[test]
 pytest tests/
 ```
 
-Running this does not work.
+Running the unit tests with `tox` does not work.
 
 ```shell
 tox
@@ -54,11 +78,12 @@ E   ModuleNotFoundError: No module named 'tox_pyproject.config'
 The missing module is in the tox virtual environment.
 
 ```shell
-$ ls .tox/py310/lib/python3.10/site-packages/tox_pyproject/
+$ ls ~/src/tox-pyproject/tox-pyproject-plugins/.tox/py310/lib/python3.10/site-packages/tox_pyproject/
 app.py  config.py  __init__.py  plugins  __pycache__  tox_pyproject.py
 ```
 
-After running tox once it is possible to run the import command that failed inside the tox virtual environment.
+After running tox once (so the tox virtual environment is created) it is possible to run the import command that failed
+inside the tox virtual environment.
 
 ```shell
 deactivate # from original virtual environment
@@ -66,3 +91,6 @@ deactivate # from original virtual environment
 python
 from tox_pyproject.config import Config
 ```
+
+It is not clear why the module is available in the tox virtual environment, but is not found when running the `tox`
+command.
